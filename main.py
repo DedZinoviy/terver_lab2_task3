@@ -14,6 +14,9 @@ def allMachinesBreake(machinesNumber, machilneProbabilityList):
         resultProbability *= machilneProbabilityList[i]
     return resultProbability
 
-def onlyChosenMachine(machineNumber, machineProbabilityLeast):
-    reusltProbability = machineProbabilityLeast[machineNumber] # {Только конкретный станок выйдет из строя}
+def onlyChosenMachine(machineNumber, machineProbabilityList):
+    resultProbability = machineProbabilityList[machineNumber] # {Только конкретный станок выйдет из строя}
+    machineProbabilityList.remove(resultProbability)
+    for value in machineProbabilityList: # и {не выйдут из строя остальные станки}
+        resultProbability *= negativeProbability(value)
     return reusltProbability
