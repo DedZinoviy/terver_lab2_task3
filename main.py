@@ -19,4 +19,4 @@ def onlyChosenMachine(machineNumber, machineProbabilityList):
     machineProbabilityList.remove(resultProbability)
     for value in machineProbabilityList: # и {не выйдут из строя остальные станки}
         resultProbability *= negativeProbability(value)
-    return reusltProbability
+    return resultProbability
