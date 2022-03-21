@@ -1,8 +1,10 @@
+import numpy as np
+
 def negativeProbability(probability):
     return 1 - probability
 
-machinesNumber = input()
-machilneProbabilityList = list.append(input())
+#machinesNumber = input()
+#machilneProbabilityList = list.append(input())
 
 def atLeastOneMachineBreak(machinesNumber, machilneProbabilityList):
     resultProbability = 1
@@ -25,15 +27,31 @@ def onlyChosenMachine(machineNumber, machineProbabilityList):
 
 # A_i = {не работает iый станок}
 # Тогда {не работает только один} = A_1 * !(A_2) * !(A_3) + !(A_1) * A_2 * !(A_3) + !(A_1) * !(A_2) * A_3 и т. д.
-def onlyOneMachineBreakes(machinesNumber, machineProbabilityList):
-    resultProbability = 0 
-    for i in range(0, machinesNumber): # Для каждого элемента списка значений вероятностей
-        tmp = machineProbabilityList[i] # Сохраняем текущий элемент во временную переменную
-        machineProbabilityList.pop(i) # Извлекаем текущий элемент из списка
-        tmpResult = 1 
-        for value in machineProbabilityList: # Делаем произведение обратных вероятностей оставшихся элементов
-            tmpResult *= negativeProbability(value) 
-        tmpResult *= tmp # Домножаем на временную вероятность поломки рассматриваемого станка
-        resultProbability += tmpResult # Суммируем получившиеся произведения, т. к. произведения несовместны
-        machineProbabilityList.insert(i, tmp) # Возвращаем временный элемент на свою исходную позицию
+def onlyOneMachineBreakes(machineProbabilityList):
+    resultProbability = 0
+    negativeProbabilityList = []
+    for probability in machineProbabilityList: # Для каждого элемента списка значений вероятностей
+        negativeProbabilityList.append(negativeProbability(probability))
+    for i in range(len(negativeProbabilityList)):
+        negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
+        resultProbability += np.prod(negativeProbabilityList)
+        negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
     return resultProbability
+
+def onlyTwoMachineBreakes(machineProbabilityList):
+    resultProbability = 0
+    negativeProbabilityList = []
+    for probability in machineProbabilityList: # Для каждого элемента списка значений вероятностей
+        negativeProbabilityList.append(negativeProbability(probability))
+    for i in range(len(negativeProbabilityList) - 1):
+        negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
+        for j in range(i + 1, len(negativeProbabilityList)):
+            negativeProbabilityList[j] = negativeProbability(negativeProbabilityList[j])
+            resultProbability += np.prod(negativeProbabilityList)
+            negativeProbabilityList[j] = negativeProbability(negativeProbabilityList[j])
+        negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
+    return resultProbability
+
+if __name__ == "__main__":
+    list2 = [0.1, 0.2, 0.3]
+    print(onlyTwoMachineBreakes(list2))
