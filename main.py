@@ -1,57 +1,37 @@
-import numpy as np
+from  PyQt5 import QtWidgets
+from PyQt5.QtGui import QPixmap
+from numpy import append
+from ui import Ui_MainWindow
+import sys
+from probability import *
 
-def negativeProbability(probability):
-    return 1 - probability
+class mywindow(QtWidgets.QMainWindow):
+    '''Конструктор гловного окна'''
+    def __init__(self):
+        super(mywindow, self).__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
-#machinesNumber = input()
-#machilneProbabilityList = list.append(input())
+        self.ui.amountSpinBox.editingFinished.connect(self.changeRowCount)
+        self.ui.solveButton.clicked.connect(self.countSomeElements)
 
-def atLeastOneMachineBreak(machinesNumber, machilneProbabilityList):
-    resultProbability = 1
-    for i in range(0, machinesNumber): #{Хотя бы один сломается} = {Не ни один не сломается} 
-        resultProbability *= negativeProbability(machilneProbabilityList[i])
-    return resultProbability
+    def changeRowCount(self):
+        oldRowCount = self.ui.tableWidget.rowCount()
+        rowAmount = self.ui.amountSpinBox.value()
+        self.ui.tableWidget.setRowCount(rowAmount)
+        for i in range(oldRowCount, rowAmount):
+            self.ui.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem("0.5"))
 
-def allMachinesBreake(machinesNumber, machilneProbabilityList):
-    resultProbability = 1
-    for i in range(0, machinesNumber): # {Все станки сломаются} 
-        resultProbability *= machilneProbabilityList[i]
-    return resultProbability
+    def countSomeElements(self):
+        probabilities = []
+        for i in range(self.ui.tableWidget.rowCount()):
+            probabilities.append(negativeProbability(float(self.ui.tableWidget.item(i, 0).text())))
+        amountElements = self.ui.numbersSpinBox.value()
+        self.ui.resultLineEdit.setText(str(round(someMachineBreakes(0, amountElements, probabilities), 8)))
 
-def onlyChosenMachine(machineNumber, machineProbabilityList):
-    resultProbability = machineProbabilityList[machineNumber] # {Только конкретный станок выйдет из строя}
-    machineProbabilityList.remove(resultProbability)
-    for value in machineProbabilityList: # и {не выйдут из строя остальные станки}
-        resultProbability *= negativeProbability(value)
-    return resultProbability
-
-# A_i = {не работает iый станок}
-# Тогда {не работает только один} = A_1 * !(A_2) * !(A_3) + !(A_1) * A_2 * !(A_3) + !(A_1) * !(A_2) * A_3 и т. д.
-def onlyOneMachineBreakes(machineProbabilityList):
-    resultProbability = 0
-    negativeProbabilityList = []
-    for probability in machineProbabilityList: # Для каждого элемента списка значений вероятностей
-        negativeProbabilityList.append(negativeProbability(probability))
-    for i in range(len(negativeProbabilityList)):
-        negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
-        resultProbability += np.prod(negativeProbabilityList)
-        negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
-    return resultProbability
-
-def onlyTwoMachineBreakes(machineProbabilityList):
-    resultProbability = 0
-    negativeProbabilityList = []
-    for probability in machineProbabilityList: # Для каждого элемента списка значений вероятностей
-        negativeProbabilityList.append(negativeProbability(probability))
-    for i in range(len(negativeProbabilityList) - 1):
-        negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
-        for j in range(i + 1, len(negativeProbabilityList)):
-            negativeProbabilityList[j] = negativeProbability(negativeProbabilityList[j])
-            resultProbability += np.prod(negativeProbabilityList)
-            negativeProbabilityList[j] = negativeProbability(negativeProbabilityList[j])
-        negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
-    return resultProbability
-
-if __name__ == "__main__":
-    list2 = [0.1, 0.2, 0.3]
-    print(onlyTwoMachineBreakes(list2))
+if __name__ == '__main__': 
+    app = QtWidgets.QApplication([])
+    application = mywindow()
+    application.show()
+    
+    sys.exit(app.exec())
