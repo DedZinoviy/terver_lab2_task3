@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\varfolomey\Desktop\terver_lab2_task3\ui.ui'
+# Form implementation generated from reading ui file 'C:\Users\demon\Desktop\terver_lab2_task3-main\ui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -14,19 +14,27 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(933, 457)
+        MainWindow.resize(904, 409)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.centralwidget)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(10)
         self.textEdit.setFont(font)
+        self.textEdit.setReadOnly(True)
         self.textEdit.setObjectName("textEdit")
-        self.horizontalLayout.addWidget(self.textEdit)
+        self.verticalLayout_2.addWidget(self.textEdit)
+        self.img_lable = QtWidgets.QLabel(self.centralwidget)
+        self.img_lable.setText("")
+        self.img_lable.setScaledContents(False)
+        self.img_lable.setAlignment(QtCore.Qt.AlignCenter)
+        self.img_lable.setObjectName("img_lable")
+        self.verticalLayout_2.addWidget(self.img_lable)
+        self.horizontalLayout.addLayout(self.verticalLayout_2)
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.solveType = QtWidgets.QComboBox(self.centralwidget)
@@ -54,6 +62,7 @@ class Ui_MainWindow(object):
         self.amountSpinBox.setObjectName("amountSpinBox")
         self.gridLayout.addWidget(self.amountSpinBox, 1, 0, 1, 1)
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setMinimumSize(QtCore.QSize(235, 0))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.tableWidget.setFont(font)
@@ -108,6 +117,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.resultLineEdit.setFont(font)
+        self.resultLineEdit.setReadOnly(True)
         self.resultLineEdit.setObjectName("resultLineEdit")
         self.verticalLayout.addWidget(self.resultLineEdit)
         self.solveButton = QtWidgets.QPushButton(self.centralwidget)
@@ -117,10 +127,9 @@ class Ui_MainWindow(object):
         self.solveButton.setObjectName("solveButton")
         self.verticalLayout.addWidget(self.solveButton)
         self.horizontalLayout.addLayout(self.verticalLayout)
-        self.horizontalLayout_2.addLayout(self.horizontalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 933, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 904, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)

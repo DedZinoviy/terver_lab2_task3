@@ -16,6 +16,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.amountSpinBox.editingFinished.connect(self.changeRowCount)
         self.ui.solveType.currentIndexChanged.connect(self.changeType)
         self.ui.solveButton.clicked.connect(self.countSomeElements)
+        self.ui.img_lable.setPixmap(QPixmap("img/0.png"))
 
     '''Изменить количество строк в таблице вероятностей'''
     def changeRowCount(self):
@@ -29,6 +30,7 @@ class mywindow(QtWidgets.QMainWindow):
     '''Изменить интерфейс в зависимости от типа задачи'''
     def changeType(self):
         solveType = solveType = self.ui.solveType.currentIndex()
+        self.ui.img_lable.setPixmap(QPixmap("img/" + str(solveType) + ".png"))
         if solveType < 2:
             self.ui.numbersSpinBox.setEnabled(True)
             self.ui.advice_label.setText("")
@@ -39,16 +41,21 @@ class mywindow(QtWidgets.QMainWindow):
     '''Рассчитать выбранную задачу'''
     def countSomeElements(self):
         probabilities = []
+        amountElements = self.ui.amountSpinBox.value()
         
+        if amountElements <= 0:
+            QtWidgets.QMessageBox.warning(self, "Ошибка ввода", "Некорректное значение n \nКоличество элементов должно задаваться в диапазоне [1, 99]")
+            return
+
         try:
             for i in range(self.ui.tableWidget.rowCount()):
                 prob = float(self.ui.tableWidget.item(i, 0).text())
                 if prob < 0 or prob > 1:
-                    QtWidgets.QMessageBox.warning(self, "Ошибка ввода", "Некорректное значеник вероятности \"" + str(prob) +
+                    QtWidgets.QMessageBox.warning(self, "Ошибка ввода", "Некорректное значение вероятности \"" + str(prob) +
                     "\"\nВероятности должна задаваться в диапазоне [0, 1]")
                     return
                 else:
-                    probabilities.append(negativeProbability(float(self.ui.tableWidget.item(i, 0).text())))
+                    probabilities.append(negativeProbability(prob))
         except:
             QtWidgets.QMessageBox.warning(self, "Ошибка ввода", "Некорректный формат ввода \"" + self.ui.tableWidget.item(i, 0).text()
             + "\"\nВероятность задается десятичной дробью, целая часть от дробной должна отделяться точкой \".\"")
@@ -56,16 +63,16 @@ class mywindow(QtWidgets.QMainWindow):
         
         solveType = self.ui.solveType.currentIndex()
         if solveType < 2:
-            amountElements = self.ui.numbersSpinBox.value()
+            numbersElements = self.ui.numbersSpinBox.value()
 
-            if amountElements == 0 or amountElements > len(probabilities):
-                QtWidgets.QMessageBox.warning(self, "Ошибка ввода", "k должно лежать в диапазоне [1, n]")
+            if numbersElements < 0 or numbersElements > len(probabilities):
+                QtWidgets.QMessageBox.warning(self, "Ошибка ввода", "k должно лежать в диапазоне [0, n]")
                 return
 
             if solveType == 0:
-                self.ui.resultLineEdit.setText(str(round(someMachineBreakes(0, amountElements, probabilities), 8)))
+                str_result = "{:01.8f}".format(round(someMachineBreakes(0, numbersElements, probabilities), 8))
             else:
-                self.ui.resultLineEdit.setText(str(round(atListSomeMachineBreakes(amountElements, probabilities), 8)))
+                str_result = "{:01.8f}".format(round(atListSomeMachineBreakes(numbersElements, probabilities), 8))
         else:
             selectedElements = []
             for i, probability in enumerate(probabilities):
@@ -78,7 +85,9 @@ class mywindow(QtWidgets.QMainWindow):
                 "Не выбран ни однин станок\nЧтобы выбрать станок, отметьте его галочкой в таблице")
                 return
 
-            self.ui.resultLineEdit.setText(str(round(onlyChosenMachinesBreakes(selectedElements, probabilities), 8)))
+            str_result = "{:01.8f}".format(round(onlyChosenMachinesBreakes(selectedElements, probabilities), 8))
+        
+        self.ui.resultLineEdit.setText(str_result)
 
 if __name__ == '__main__': 
     app = QtWidgets.QApplication([])
