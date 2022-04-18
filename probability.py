@@ -9,11 +9,6 @@ def someMachineBreakes(first, amount, negativeProbabilityList):
     resultProbability = 0
     if amount == 0:
         resultProbability = np.prod(negativeProbabilityList)
-    elif amount == 1:
-        for i in range(first, len(negativeProbabilityList)):
-            negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
-            resultProbability += np.prod(negativeProbabilityList)
-            negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
     else:
         for i in range(first, len(negativeProbabilityList) - amount + 1):
             negativeProbabilityList[i] = negativeProbability(negativeProbabilityList[i])
